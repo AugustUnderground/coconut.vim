@@ -72,21 +72,28 @@ set cpo&vim
 " - 'print' is a built-in in Python 3.0 and will be highlighted as
 "   built-in below (use 'from __future__ import print_function' in 2.6)
 "
-syn keyword coconutStatement	False, None, True
-syn keyword coconutStatement	as assert break continue del exec global
+syn keyword coconutStatement	False None True
+syn keyword coconutStatement	as assert break continue del exec global where
 syn keyword coconutStatement	lambda nonlocal pass print return with yield
-syn keyword coconutStatement	class def nextgroup=coconutFunction skipwhite
-syn keyword coconutConditional	elif else if
+"syn keyword coconutStatement	class def nextgroup=coconutFunction skipwhite
+syn keyword coconutStatement	def nextgroup=coconutFunction skipwhite
+syn keyword coconutStatement	class data nextgroup=coconutData skipwhite
+syn keyword coconutConditional	elif else if then
 syn keyword coconutRepeat	for while
 syn keyword coconutOperator	and in is not or
 syn keyword coconutException	except finally raise try
 syn keyword coconutInclude	from import
+syn keyword coconutSelf		super self
 
 " Decorators (new in Python 2.4)
 syn match   coconutDecorator	"@" display nextgroup=coconutFunction skipwhite
 
 " Pipe operators
-syn match   coconutPipe	/\%(|>\||\*>\|<|\|<\*|\)/ display
+syn match   coconutPipe		/\%(|>\||\*>\|<|\|<\*|\)/ display
+
+" Operators
+syn match   coconutFOperator    /\%(\*\|\/\|+\|-\|%\|?\||\|||\)/ display 
+syn match   coconutFOperator    /\%(&\|&&\|=\|>\|<\|==\|<=\|=<\|>=\|=>\)/ display
 
 " Compose
 syn match   coconutCompose	"\.\." display
@@ -111,8 +118,12 @@ syn match   coconutCodePaththrough	/\\\\\w\+/ display
 " interpreted as a function inside the contained environment of
 " doctests.
 " A dot must be allowed because of @MyClass.myfunc decorators.
+"syn match   coconutFunction
+"      \ "\%(\%(def\s\|class\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained
 syn match   coconutFunction
-      \ "\%(\%(def\s\|class\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained
+      \ "\%(\%(def\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained
+syn match   coconutData
+      \ "\%(\%(data\s\|class\s\)\s*\)\@<=\h\%(\w\|\.\)*" contained
 
 syn match   coconutEscapableStatement	/\\\@<!\(data\|async\|await\)\>/
 syn match   coconutEscapableConditional	/\\\@<!\(match\|case\)\>/
@@ -212,7 +223,7 @@ if !exists("coconut_no_builtin_highlight")
   syn keyword coconutBuiltin	ord parallel_map pow prepattern print property
   syn keyword coconutBuiltin	range recursive recursive_iterator reiterable
   syn keyword coconutBuiltin	repr reversed round scan set setattr slice sorted
-  syn keyword coconutBuiltin	starmap staticmethod str sum super takewhile tee
+  syn keyword coconutBuiltin	starmap staticmethod str sum log takewhile tee
   syn keyword coconutBuiltin	tuple type vars zip __import__
   " Python 2.6 only
   syn keyword coconutBuiltin	basestring callable cmp execfile file
@@ -298,7 +309,9 @@ if version >= 508 || !exists("did_coconut_syn_inits")
   HiLink coconutStatement	Statement
   HiLink coconutConditional	Conditional
   HiLink coconutRepeat		Repeat
-  HiLink coconutOperator		Operator
+  HiLink coconutOperator	Operator
+  HiLink coconutFOperator	Operator
+  HiLink coconutSelf		Type
   HiLink coconutException	Exception
   HiLink coconutInclude		Include
   HiLink coconutDecorator	Define
@@ -307,9 +320,10 @@ if version >= 508 || !exists("did_coconut_syn_inits")
   HiLink coconutChain		Operator
   HiLink coconutArrow		Operator
   HiLink coconutPartial		Operator
-  HiLink coconutPlaceholder		SpecialChar
+  HiLink coconutPlaceholder	SpecialChar
   HiLink coconutCodePaththrough	Macro
-  HiLink coconutFunction		Function
+  HiLink coconutFunction        Function
+  HiLink coconutData		Type
   HiLink coconutEscapableStatement		Statement
   HiLink coconutEscapableConditional		Conditional
   HiLink coconutComment		Comment
