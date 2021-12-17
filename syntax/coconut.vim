@@ -92,7 +92,7 @@ syn match   coconutDecorator	"@" display nextgroup=coconutFunction skipwhite
 syn match   coconutPipe		/\%(|>\||\*>\|<|\|<\*|\)/ display
 
 " Operators
-syn match   coconutFOperator    /\%(\*\|\/\|+\|-\|%\|?\||\|||\)/ display 
+syn match   coconutFOperator    /\%(\*\|\/\|+\|-\|%\|^\|?\||\|||\)/ display 
 syn match   coconutFOperator    /\%(&\|&&\|=\|>\|<\|==\|<=\|=<\|>=\|=>\)/ display
 
 " Compose
@@ -112,6 +112,9 @@ syn match   coconutPlaceholder	/\<_\>/ display
 
 " Code Paththrough
 syn match   coconutCodePaththrough	/\\\\\w\+/ display
+
+" Infix Operators
+syn region  coconutInfix start=+[uU]\=`+ end="`" 
 
 " The zero-length non-grouping match before the function name is
 " extremely important in coconutFunction.  Without it, everything is
@@ -311,6 +314,7 @@ if version >= 508 || !exists("did_coconut_syn_inits")
   HiLink coconutRepeat		Repeat
   HiLink coconutOperator	Operator
   HiLink coconutFOperator	Operator
+  HiLink coconutInfix		Operator
   HiLink coconutSelf		Type
   HiLink coconutException	Exception
   HiLink coconutInclude		Include
